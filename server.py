@@ -1,13 +1,19 @@
-from flask import Flask
-import pickle
+from flask import Flask, request
+import pickle, json
+import numpy as np
 
 
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def hello_world():
-    return 'Hello World!'
+    if request.method == 'POST':
+        X = json.loads(request.form['X_rows'])
+        pred = [int(i) for i in MODEL.predict(X)]
+        print()
+        return json.dumps(pred)
+    return 'Please use POST method', 423
 
 if __name__ == '__main__':
     with open('model.pckl', 'rb') as file:
